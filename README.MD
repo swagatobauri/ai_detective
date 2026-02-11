@@ -1,50 +1,38 @@
-🕵️ Cold Case Detective
-Retrieval Augmented Generation (RAG) with Source Tracking
+Under the Hood: The Cold Case AI Detective
 
-A TypeScript-based RAG system that answers questions only using provided evidence files and explicitly cites the source documents.
-This project demonstrates how to build a trustworthy, citation-aware AI system instead of a hallucination-prone chatbot.
+AI is amazing… but it sometimes confidently makes things up. That’s a problem when working with sensitive information like legal documents, lab reports, or private notes. 
 
-🚀 Project Goal
+Cold Case AI Detective was built to solve this: answers must be accurate and backed by evidence. No guessing. No hallucinations. Just reliable answers from your own documents.
 
-Build an AI assistant that:
+The Problem:
+Why not just use ChatGPT or other LLMs?
 
-Retrieves relevant evidence using vector embeddings
+1. They don’t know your private data — your case files, lab reports, or notes are invisible to them.
+2. They can hallucinate — if they don’t know something, they may invent an answer that sounds correct.
 
-Answers questions using an LLM
+When accuracy matters, this is unacceptable.
 
-Never hallucinates
+The Solution: RAG:
+We use RAG (Retrieval Augmented Generation) — think of it as an open-book exam for AI.
 
-Always cites the exact source file
+Flow:
+1. You ask a question.
+2. The system searches your documents for relevant paragraphs.
+3. We pass this evidence to the AI and tell it to use ONLY this information.
+4. The AI answers with citations, reducing hallucinations.
 
-This mirrors real-world AI use cases like:
+System Flow:
+1. Question: e.g., "What course was the suspect enrolled in?"
+2. Search: Scan all files in the data/ folder.
+3. Evidence: Find most relevant sections using vector embeddings.
+4. Prompt: Build a strict evidence-only prompt for the AI.
+5. Answer: AI responds, citing the source.
 
-Legal document analysis
+We kept the code simple and modular for easy understanding and extension.
+- ingest.ts (The Librarian): Reads all .txt files in data/ folder.
+- embed.ts (The Translator): Converts text into vector embeddings for similarity search.
+- search.ts (The Detective): Finds the most relevant document sections using cosine similarity.
+- rag.ts (The Interrogator): Combines evidence and question, queries the AI, and returns the answer.
 
-Forensics & investigations
 
-Enterprise knowledge bases
 
-Research assistants
-
-🧠 What is RAG?
-
-Retrieval Augmented Generation (RAG) combines:
-
-Retrieval → find relevant documents
-
-Generation → reason over them using an LLM
-
-Instead of asking an LLM directly, we first retrieve evidence and then force the LLM to answer only from that evidence.
-
-🧩 Project Architecture
-Evidence Files (.txt)
-        ↓
-  Embeddings (OpenAI)
-        ↓
-Vector Search (Cosine Similarity)
-        ↓
-  Top Evidence + Metadata
-        ↓
-    LLM (OpenRouter)
-        ↓
-Answer + Source Citations
